@@ -11,7 +11,7 @@ output "private_subnet_ids" {
 }
 
 output "s3_bucket_arn" {
-  value = module.s3_bucket.bucket_arn
+  value = module.s3_bucket.s3_bucket_arn
 }
 
 output "ec2_instance_id" {
@@ -20,4 +20,8 @@ output "ec2_instance_id" {
 
 output "rds_endpoint" {
   value = module.rds.db_instance_endpoint
+}
+
+output "eip_public_ip" {
+  value = module.eip.eip_public_ip
 }

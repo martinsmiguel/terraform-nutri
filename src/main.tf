@@ -31,13 +31,21 @@ module "s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"
 
-  bucket = "nutri-"
+  bucket = "nutri-${random_pet.bucket_suffix.id}"
   acl    = "private"
+
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
 
   tags = {
     Terraform   = "true"
     Environment = "prod"
   }
+}
+module "key_pair" {
+  source = "./modules/key_pairs"
+
+  key_name = "nutri"
 }
 
 module "ec2" {
@@ -47,14 +55,27 @@ module "ec2" {
 
   instance_type = var.ec2_instance_type
 
+  key_name = module.key_pair.key_name
+
   tags = {
     Terraform   = "true"
     Environment = "prod"
     Role        = "web_server"
   }
 
-  depends_on = [module.vpc]
+  depends_on = [module.vpc, module.key_pair]
 }
+
+
+module "eip" {
+  source = "./modules/eip"
+
+  instance_id = module.ec2.instance_id
+
+  depends_on = [module.ec2]
+
+}
+
 
 module "rds" {
   source = "./modules/rds"

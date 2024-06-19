@@ -27,6 +27,18 @@ module "vpc" {
   }
 }
 
+module "web_server_nutri" {
+  source = "terraform-aws-modules/security-group/aws//modules/http-80"
+
+  name        = "web-server"
+  description = "Security group for web-server with HTTP ports open within VPC"
+  vpc_id      = module.vpc.id
+
+  ingress_cidr_blocks = module.vpc.public_subnets
+
+  depends_on = [module.vpc]
+}
+
 module "s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"

@@ -3,7 +3,7 @@ resource "aws_instance" "web" {
   instance_type = var.instance_type
   subnet_id     = var.public_subnet_ids[0]
   key_name      = var.key_name
-  security_groups = [var.securiy_group_id]
+  security_groups = var.securiy_group_id
 
   tags = merge({
     Name = "Nutri prod"

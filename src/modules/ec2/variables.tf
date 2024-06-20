@@ -20,6 +20,6 @@ variable "key_name" {
 }
 
 variable "securiy_group_id" {
-   type        = string
+   type        = set(string)
   description = "Security group ID"
 }

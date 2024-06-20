@@ -6,7 +6,7 @@ source .env
 set -o allexport
 
 export AWS_REGION="sa-east-1"
-export AWS_PROFILE="terraform-miguel"
+export AWS_PROFILE="terraform"
 
 # Criar arquivo terraform.tfvars.json
 cat > terraform.tfvars.json <<EOL

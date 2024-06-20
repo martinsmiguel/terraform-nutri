@@ -27,6 +27,15 @@ module "vpc" {
   }
 }
 
+module "eip" {
+  source = "./modules/eip"
+
+  instance_id = module.ec2.instance_id
+
+  depends_on = [module.ec2]
+
+}
+
 module "security_group_nutri" {
   source = "terraform-aws-modules/security-group/aws//modules/http-80"
 
@@ -36,7 +45,24 @@ module "security_group_nutri" {
 
   ingress_cidr_blocks = module.vpc.public_subnets_cidr_blocks
 
-  depends_on = [module.vpc]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "HTTPS access from public subnets"
+      cidr_blocks = module.vpc.public_subnets_cidr_blocks
+    },
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "SSH access"
+      cidr_blocks = [module.eip.public_ip]
+    }
+  ]
+
+  depends_on = [module.vpc, module.eip]
 }
 
 module "s3_bucket" {
@@ -78,16 +104,6 @@ module "ec2" {
   }
 
   depends_on = [module.vpc, module.key_pair, module.security_group_nutri]
-}
-
-
-module "eip" {
-  source = "./modules/eip"
-
-  instance_id = module.ec2.instance_id
-
-  depends_on = [module.ec2]
-
 }
 
 

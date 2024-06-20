@@ -32,8 +32,6 @@ module "eip" {
 
   instance_id = module.ec2.instance_id
 
-  depends_on = [module.ec2]
-
 }
 
 module "security_group_nutri" {
@@ -61,8 +59,6 @@ module "security_group_nutri" {
       cidr_blocks = [module.eip.public_ip]
     }
   ]
-
-  depends_on = [module.vpc, module.eip]
 }
 
 module "s3_bucket" {
@@ -102,8 +98,6 @@ module "ec2" {
     Environment = "prod"
     Role        = "web_server"
   }
-
-  depends_on = [module.vpc, module.key_pair, module.security_group_nutri]
 }
 
 
@@ -122,7 +116,5 @@ module "rds" {
     Environment = "prod"
     Role        = "database"
   }
-
-  depends_on = [module.vpc]
 
 }

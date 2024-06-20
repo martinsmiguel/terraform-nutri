@@ -18,3 +18,8 @@ variable "key_name" {
   type        = string
   description = "Key pair name"
 }
+
+variable "securiy_group_id" {
+   type        = string
+  description = "Security group ID"
+}

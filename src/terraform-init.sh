@@ -6,7 +6,7 @@ source .env
 set -o allexport
 
 export AWS_REGION="sa-east-1"
-export AWS_PROFILE="terraform"
+export AWS_PROFILE="terraform-miguel"
 
 # Criar arquivo terraform.tfvars.json
 cat > terraform.tfvars.json <<EOL
@@ -15,7 +15,7 @@ cat > terraform.tfvars.json <<EOL
   "profile": "${AWS_PROFILE}",
   "rds_db_name": "${DB_NAME}",
   "rds_username": "${DB_USER_NAME}",
-  "rds_password": "${DB_PASSWORD}",
+  "rds_password": "${DB_PASSWORD}"
 }
 EOL
 

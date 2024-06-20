@@ -27,7 +27,7 @@ module "vpc" {
   }
 }
 
-module "web_server_nutri" {
+module "security_group_nutri" {
   source = "terraform-aws-modules/security-group/aws//modules/http-80"
 
   name        = "web-server"
@@ -67,6 +67,8 @@ module "ec2" {
 
   instance_type = var.ec2_instance_type
 
+  securiy_group_id = [module.security_group_nutri.security_group_id]
+
   key_name = module.key_pair.key_name
 
   tags = {
@@ -75,7 +77,7 @@ module "ec2" {
     Role        = "web_server"
   }
 
-  depends_on = [module.vpc, module.key_pair]
+  depends_on = [module.vpc, module.key_pair, module.security_group_nutri]
 }
 
 

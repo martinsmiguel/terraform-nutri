@@ -43,22 +43,16 @@ module "security_group_nutri" {
 
   ingress_cidr_blocks = module.vpc.public_subnets_cidr_blocks
 
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      description = "HTTPS access from public subnets"
-      cidr_blocks = module.vpc.public_subnets_cidr_blocks
-    },
-    {
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      description = "SSH access"
-      cidr_blocks = [module.eip.eip_public_ip]
-    }
+  ingress_rules = [
+    "http-80-tcp",
+    "https-443-tcp",
+    "ssh-tcp"
   ]
+
+  egress_rules = [
+    "all-all"
+  ]
+
 }
 
 module "s3_bucket" {

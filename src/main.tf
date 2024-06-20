@@ -32,9 +32,9 @@ module "web_server_nutri" {
 
   name        = "web-server"
   description = "Security group for web-server with HTTP ports open within VPC"
-  vpc_id      = module.vpc.id
+  vpc_id      = module.vpc.vpc_id
 
-  ingress_cidr_blocks = module.vpc.public_subnets
+  ingress_cidr_blocks = ["10.0.0.0/16"]
 
   depends_on = [module.vpc]
 }

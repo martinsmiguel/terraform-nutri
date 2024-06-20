@@ -41,7 +41,7 @@ module "security_group_nutri" {
   description = "Security group for web-server with HTTP ports open within VPC"
   vpc_id      = module.vpc.vpc_id
 
-  ingress_cidr_blocks = module.vpc.public_subnets_cidr_blocks
+  ingress_cidr_blocks = ["0.0.0.0/0"]
 
   ingress_rules = [
     "http-80-tcp",

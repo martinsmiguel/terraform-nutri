@@ -56,7 +56,7 @@ module "security_group_nutri" {
       to_port     = 22
       protocol    = "tcp"
       description = "SSH access"
-      cidr_blocks = [module.eip.public_ip]
+      cidr_blocks = [module.eip.eip_public_ip]
     }
   ]
 }

@@ -18,13 +18,15 @@ variable "password" {
   type        = string
 }
 
-variable "private_subnet_ids" {
-  description = "List of private subnet IDs"
-  type        = list(string)
-}
+
 
 variable "tags" {
   description = "Tags to be applied to resources"
   type        = map(string)
   default     = {}
+}
+
+variable "subnet_group_name" {
+  description = "Subnet group name for the RDS database"
+  type        = string
 }

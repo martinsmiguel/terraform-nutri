@@ -49,6 +49,13 @@ module "security_group_nutri" {
     "ssh-tcp"
   ]
 
+  ingress_with_cidr_blocks = [
+    {
+      rule        = "postgresql-tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+
   egress_rules = [
     "all-all"
   ]
@@ -94,16 +101,27 @@ module "ec2" {
   }
 }
 
+module "db_subnet_group_name" {
+  source = "./modules/db_subnet_group"
+
+  private_subnet_ids = module.vpc.private_subnets
+
+  tags = {
+    Terraform   = "true"
+    Environment = "prod"
+  }
+
+}
+
 
 module "rds" {
   source = "./modules/rds"
-
-  private_subnet_ids = module.vpc.private_subnets
 
   db_instance_class = var.rds_instance_class
   db_name           = var.rds_db_name
   username          = var.rds_username
   password          = var.rds_password
+  subnet_group_name = module.db_subnet_group_name.name
 
   tags = {
     Terraform   = "true"

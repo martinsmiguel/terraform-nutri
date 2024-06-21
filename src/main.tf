@@ -18,8 +18,12 @@ module "vpc" {
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
-  enable_nat_gateway = true
-  single_nat_gateway = true
+  enable_nat_gateway                     = true
+  single_nat_gateway                     = true
+  reuse_nat_ips                          = true
+  create_database_subnet_group           = true
+  create_database_subnet_route_table     = true
+  create_database_internet_gateway_route = true
 
   tags = {
     Terraform   = "true"
@@ -101,18 +105,6 @@ module "ec2" {
   }
 }
 
-module "db_subnet_group_name" {
-  source = "./modules/db_subnet_group"
-
-  private_subnet_ids = module.vpc.private_subnets
-
-  tags = {
-    Terraform   = "true"
-    Environment = "prod"
-  }
-
-}
-
 
 module "rds" {
   source = "./modules/rds"
@@ -121,7 +113,7 @@ module "rds" {
   db_name           = var.rds_db_name
   username          = var.rds_username
   password          = var.rds_password
-  subnet_group_name = module.db_subnet_group_name.name
+  subnet_group_name = module.vpc.database_subnet_group_name
 
   tags = {
     Terraform   = "true"
